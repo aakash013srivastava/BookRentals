@@ -1,5 +1,26 @@
 {% extends 'base.html'%}
 {%block body%}
 
+<form method="POST">
+    <div class="mb-3">
+      <label for="title" class="form-label">Book Title</label>
+      <input type="text" class="form-control" id="title" name="title" title="Atleast 8 characters" pattern="[A-Za-z0-9]{8,}" required>
+      
+    </div>
+    <div class="mb-3">
+      <label for="isbn" class="form-label">ISBN</label>
+      <input type="text" class="form-control" id="isbn" name="isbn" pattern="[0-9]{13}" title="13 digits" required>
+    </div>
+    <div class="mb-3 ">
+        <label class="form-label" for="author">Book Author</label>
+        <input type="text" class="form-control " id="author" name="author" pattern="[A-Za-z]{5,}" title="Atleast 5 in length,Alphabets only" required>
+    </div>
+    <div class="mb-3">
+        <label for="year" class="form-label">Publishing Year</label>
+        <input type="text" class="form-control" id="year" name="year" pattern="[0-9]{4}" title="Enter year of publishing" required>
+      </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
 
 {% endblock%}
