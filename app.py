@@ -8,7 +8,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
 
-BOOK_FOLDER = os.path.join('static', 'images_photo')
+BOOK_FOLDER = os.path.join('static', 'images')
 app.config['UPLOAD_FOLDER'] = BOOK_FOLDER
 
 class Book(db.Model):
