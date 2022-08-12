@@ -1,1 +1,16 @@
 {% extends 'base.html'%}
+
+{% block body %}
+    <table>
+        {% for img in images%}
+        <tr>
+            <td>
+            <img src="{{img}}" width="100px" height="100px"/>
+            </td>
+            <td>
+            <strong>{{img[14:]}}</strong>
+            </td>
+        </tr>
+        {%  endfor %}
+    </table>
+{% endblock %}
