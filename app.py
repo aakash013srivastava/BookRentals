@@ -21,5 +21,21 @@ class User(db.Model):
 def index():
     return render_template('index.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/rent_book')
+def rent_book():
+    return render_template('rent_book.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
