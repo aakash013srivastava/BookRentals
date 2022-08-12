@@ -1,5 +1,6 @@
 from flask import Flask,flash,render_template,redirect,session
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 app =Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/bookrentals.db'
@@ -7,19 +8,26 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
 
-class User(db.Model):
+BOOK_FOLDER = os.path.join('static', 'images_photo')
+app.config['UPLOAD_FOLDER'] = BOOK_FOLDER
+
+class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80),nullable=False)
+    title = db.Column(db.String(80), unique=True, nullable=False)
+    isbn = db.Column(db.Integer, unique=True, nullable=False)
+    author = db.Column(db.String(80),nullable=False)
+    year = db.Column(db.Integer,nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Book %s --by:%s>'.format(self.title,self.author)
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    imageList = os.listdir('static/images')
+    images = ['static/images/' + image for image in imageList]
+    print(images)
+    return render_template("index.html", images=images)
 
 @app.route('/about')
 def about():
@@ -36,6 +44,12 @@ def login():
 @app.route('/rent_book')
 def rent_book():
     return render_template('rent_book.html')
+
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
