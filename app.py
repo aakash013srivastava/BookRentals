@@ -22,9 +22,25 @@ def index():
 def about():
     return render_template('about.html')
 
-@app.route('/register')
+@app.route('/register',methods=['GET','POST'])
 def register():
+    if request.method == "POST":
+        f1 = open('Users.txt','a')
+        if os.stat('Users.txt').st_size != 0:
+            ls = f1.readlines()
+            if len(ls):
+                for line in ls:
+                    l1=line.split(",")
+                    l2=l1.split(':')
+                    print(l2)
+        f1.close()
+        
+        f = open('Users.txt','a')
+        f.write("email:"+request.form['exampleInputEmail1']+",password:"+request.form['exampleInputPassword1']+"\n")
+        f.close()
+        return redirect('/login')
     return render_template('register.html')
+    
 
 @app.route('/login')
 def login():
@@ -36,7 +52,7 @@ def rent_book(title):
 
     print(title)
     f = open('request.txt','a')
-    f.write("email:"+"aakash@gmail.com"+",title:"+title+"\n")
+    f.write("email:"+"aakash@gmail.com"+",fileName:"+title+"\n")
     f.close()
     return redirect('/')    
 
