@@ -8,7 +8,10 @@
             <img src="{{img}}" width="100px" height="100px"/>
             </td>
             <td>
-            <strong>{{img[14:]}}</strong>
+            <strong>{{img[14:-4]}}</strong>
+            </td>
+            <td>
+                Rent:<a href="/rent_book/{{img[14:-4]}}">Here</a>
             </td>
         </tr>
         {%  endfor %}
