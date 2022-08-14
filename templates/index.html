@@ -1,6 +1,10 @@
 {% extends 'base.html'%}
 
 {% block body %}
+
+    {% for mesg in get_flashed_messages() %}
+      <h1>{{ mesg }}</h1>
+    {% endfor %}
     <table>
         {% for img in images%}
         <tr>
@@ -11,7 +15,7 @@
             <strong>{{img[14:-4]}}</strong>
             </td>
             <td>
-                Rent:<a href="/rent_book/{{img[14:-4]}}">Here</a>
+                {% if email %}Rent:<a href="/rent_book/{{img[14:-4]}}">Here</a>{% endif %}
             </td>
         </tr>
         {%  endfor %}

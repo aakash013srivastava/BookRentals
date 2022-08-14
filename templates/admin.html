@@ -1,6 +1,11 @@
 {% extends 'base.html'%}
 {%block body%}
 
+
+<h3><strong>Add a book</strong></h3>
+
+{% if email%}
+
 <form method="POST" enctype="multipart/form-data">
     <div class="mb-3">
       <label for="title" class="form-label">Book Title</label>
@@ -27,6 +32,12 @@
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+{% else%}
 
+<h4>Login First</h4>
+
+<a href="/login">Here</a>
+
+{% endif%}
 
 {% endblock%}
