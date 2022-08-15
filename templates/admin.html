@@ -2,12 +2,12 @@
 {%block body%}
 
 
-{% if email%}
+{% if email and email == 'aakash@gmail.com'%}
 
 <h3><strong>Book requests</strong></h3>
     <table>
     {% for r in requests %}
-      <tr><td>{{r}}</td></tr>
+      <tr><td>{{r}}</td><td><a href="/serve_request/{{r}}"><button>Serve</button></a></td></tr>
     {%endfor%}
     </table>
 
@@ -42,8 +42,10 @@
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+{% elif email and email != 'aakash@gmail.com'%}
 
-  
+<h4>Login as Admin</h4>
+
 {% else%}
 
 <h4>Login First</h4>

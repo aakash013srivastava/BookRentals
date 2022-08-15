@@ -113,9 +113,27 @@ def admin():
         f.close()
         flash('Book was added to DB')
         return redirect('/')
-    return render_template('admin.html',email=session['email'] if 'email' in session else None)
 
+    f= open('request.txt','r')
+    file = f.readlines()
+    f.close()
+    return render_template('admin.html',email=session['email'] if 'email' in session else None,requests=file)
 
+@app.route('/serve_request/<requested>')
+def serve(requested):
+    f = open('request.txt','r')
+    lines = f.readlines()
+    print(lines)
+    print(requested)
+    f.close()
+    for line in range(0,len(lines)):
+        if lines[line].strip() == requested:
+            lines[line] = ''
+
+    f = open('request.txt','w')
+    f.write("".join(lines))
+    f.close()
+    return redirect('/admin')
 
 if __name__ == '__main__':
     app.run(debug=True)
