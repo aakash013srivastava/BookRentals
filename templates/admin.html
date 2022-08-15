@@ -2,9 +2,19 @@
 {%block body%}
 
 
+{% if email%}
+
+<h3><strong>Book requests</strong></h3>
+    <table>
+    {% for r in requests %}
+      <tr><td>{{r}}</td></tr>
+    {%endfor%}
+    </table>
+
+<h1><strong>OR</strong></h1>
+
 <h3><strong>Add a book</strong></h3>
 
-{% if email%}
 
 <form method="POST" enctype="multipart/form-data">
     <div class="mb-3">
@@ -32,6 +42,8 @@
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+
+  
 {% else%}
 
 <h4>Login First</h4>
