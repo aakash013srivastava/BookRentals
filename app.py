@@ -2,6 +2,7 @@ from shelve import DbfilenameShelf
 from flask import Flask,flash,render_template,redirect,session,request,flash
 from werkzeug.utils import secure_filename
 
+
 import os
 
 
@@ -12,17 +13,21 @@ UPLOAD_FOLDER = 'static/images/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
+
 def check_registration():
     f = open('Users.txt','r')
     flag = False
     lines = f.readlines()
-    for line in lines:
-        email = (line.split(',')[0]).split(':')[1]
-        password = (line.split(',')[1]).split(':')[1]
-        if request.form['exampleInputEmail1'] == email:
-            return True
+    if len(lines)>0:
+        for line in lines:
+            email = (line.split(',')[0]).split(':')[1]
+            password = (line.split(',')[1]).split(':')[1]
+            if request.form['exampleInputEmail1'] == email:
+                return True
     f.close()
     return False
+
+
         
 
 
@@ -31,7 +36,9 @@ def index():
     imageList = os.listdir('static/images')
     images = ['static/images/' + image for image in imageList]
     print(images)
-    return render_template("index.html", images=images)
+    if 'email' in session:
+        return render_template("index.html", images=images,email=session['email'])
+    return render_template("index.html", images=images,email=None)
 
 @app.route('/about')
 def about():
@@ -45,7 +52,7 @@ def register():
             f = open('Users.txt','a')
             f.write("email:"+request.form['exampleInputEmail1']+",password:"+request.form['exampleInputPassword1']+"\n")
             f.close()
-            
+            flash('User registered !!!')
         else:
             flash('User Already registered')
         return redirect('/login')
@@ -55,19 +62,34 @@ def register():
 @app.route('/login',methods=['GET','POST'])
 def login():
     if request.method == 'POST':
-        f1 = open('Users.txt','a')
-        if os.stat('Users.txt').st_size != 0:
-            ls = f1.readlines()
-            if len(ls):
-                for line in ls:
-                    l1=line.split(",")
-                    for l in l1:
-                        l2=l1.split(':')
-                        print(l2)
-                    
-        f1.close()
-        return redirect('/')
+        with open('Users.txt','r') as f:
+            flag = False
+            lines = f.readlines()
+            if len(lines)>0:
+                print(lines)
+                for line in lines:
+                    email = (line.split(',')[0]).split(':')[1].strip()
+                    password = (line.split(',')[1]).split(':')[1].strip()
+                    print((password == request.form['exampleInputPassword1']))
+                    print(len(password))
+                    if request.form['exampleInputEmail1'] == email and request.form['exampleInputPassword1'] == password:
+                        session['email'] = email
+                        flash('You have successfully logged in')
+                        return redirect('/')
+                    elif request.form['exampleInputEmail1'] == email and request.form['exampleInputPassword1'] != password:
+                        flash('Wrong Email/Password combination')
+                        return redirect('/login')                    
+                flash('User does not exist')
+                return redirect('/register')
+    
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('email',None)
+    flash('You have successfully Logged Out !!!')
+    return redirect('/')
+
 
 @app.route('/rent_book/<title>',methods=['GET','POST'])
 def rent_book(title):
@@ -75,7 +97,7 @@ def rent_book(title):
 
     print(title)
     f = open('request.txt','a')
-    f.write("email:"+"aakash@gmail.com"+",fileName:"+title+"\n")
+    f.write("email:"+session['email']+",fileName:"+title+"\n")
     f.close()
     return redirect('/')    
 
@@ -91,7 +113,7 @@ def admin():
         f.close()
         flash('Book was added to DB')
         return redirect('/')
-    return render_template('admin.html')
+    return render_template('admin.html',email=session['email'] if 'email' in session else None)
 
 
 
